@@ -1,8 +1,8 @@
-# Make me a dinner
+# Food me
 
 Tired of throwing so much food to waste? 
 This app will help you remain in control of what you have in the fridge, by telling you what can you make with it.
-Just make me a dinner!
+Just food me!
 
 ## Build with:
 * React
