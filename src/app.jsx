@@ -39,6 +39,6 @@ class App extends Component {
         </div>;
 }
 
-const renderMockRecipes = (count) => Array(count).fill(<Mock />).map((x, index) => <Mock key={index}>{x}</Mock>);
+const renderMockRecipes = (count) => Array(count).fill(null).map((x, index) => <Mock key={index}></Mock>);
 
 export default App;
