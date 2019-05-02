@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import firebase from './firebase';
+import Mock from './components/mock';
+
+const styles = {
+    container: {
+        margin: '0 20px'
+    }
+};
 
 class App extends Component {
     state = {
@@ -24,12 +31,14 @@ class App extends Component {
     }
 
     render = () =>
-        <React.Fragment>
-            {this.state.data &&
-                this.state.data.map((recipe, index) =>
-                    <p key={index}>{recipe.title}</p>
-                )}
-        </React.Fragment>;
+        <div style={styles.container}>
+            <h2>Recipes</h2>
+            {this.state.data
+                ? this.state.data.map((recipe, index) => <p key={index}>{recipe.title}</p>)
+                : renderMockRecipes(10)}
+        </div>;
 }
+
+const renderMockRecipes = (count) => Array(count).fill(<Mock />).map((x, index) => <Mock key={index}>{x}</Mock>);
 
 export default App;
