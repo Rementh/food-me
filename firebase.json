@@ -1,10 +1,4 @@
 {
-    "database": {
-        "rules": {
-            ".read": "auth != null",
-            ".write": "auth != null"
-        }
-    },
     "hosting": {
         "public": "dist",
         "ignore": [
