@@ -10,6 +10,7 @@
         "deploy": "npm run build && firebase deploy --project food-me-app"
     },
     "dependencies": {
+        "firebase": "^5.11.0",
         "react": "^16.7.0",
         "react-dom": "^16.7.0"
     },
