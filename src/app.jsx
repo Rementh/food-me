@@ -34,7 +34,12 @@ class App extends Component {
         <div style={styles.container}>
             <h2>Recipes</h2>
             {this.state.data
-                ? this.state.data.map((recipe, index) => <p key={index}>{recipe.title}</p>)
+                ? this.state.data.map((recipe, index) =>
+                    <React.Fragment key={index}>
+                        <h4>{recipe.title}</h4>
+                        {recipe.instructions.map((step, index) => <p key={index}>{index + 1}. {step}</p>)}
+                    </React.Fragment>
+                )
                 : renderMockRecipes(10)}
         </div>;
 }
