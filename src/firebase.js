@@ -21,7 +21,8 @@ const makeFirebaseInstance = () => {
             await auth.createUserWithEmailAndPassword(email, password);
             return auth.currentUser.updateProfile({ displayName: name });
         },
-        getCurrentUsername: () => auth.currentUser && auth.currentUser.displayName
+        getCurrentUsername: () => auth.currentUser && auth.currentUser.displayName,
+        isInitialized: () => new Promise(resolve => auth.onAuthStateChanged(resolve))
     };
 };
 
