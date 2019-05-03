@@ -1,49 +1,16 @@
-import React, { Component } from 'react';
-import firebase from './firebase';
-import Mock from './components/mock';
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './pages/home';
+import Login from './pages/login';
+import Register from './pages/register';
 
-const styles = {
-    container: {
-        margin: '0 20px'
-    }
-};
-
-class App extends Component {
-    state = {
-        data: null
-    };
-
-    componentDidMount() {
-        const user = {
-            email: 'test@test.com',
-            password: 'testtest'
-        };
-
-        firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-            .then(this.loadData)
-            .catch(console.log);
-    }
-
-    loadData = () => {
-        firebase.database().ref('recipes').once('value').then(snap =>
-            this.setState({ data: snap.val() })
-        );
-    }
-
-    render = () =>
-        <div style={styles.container}>
-            <h2>Recipes</h2>
-            {this.state.data
-                ? this.state.data.map((recipe, index) =>
-                    <React.Fragment key={index}>
-                        <h4>{recipe.title}</h4>
-                        {recipe.instructions.map((step, index) => <p key={index}>{index + 1}. {step}</p>)}
-                    </React.Fragment>
-                )
-                : renderMockRecipes(10)}
-        </div>;
-}
-
-const renderMockRecipes = (count) => Array(count).fill(null).map((x, index) => <Mock key={index}></Mock>);
+const App = () =>
+    <Router>
+        <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+        </Switch>
+    </Router>;
 
 export default App;

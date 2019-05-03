@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 
@@ -8,6 +8,23 @@ const config = {
     databaseURL: 'https://food-me-app.firebaseio.com/'
 };
 
-firebase.initializeApp(config);
+const makeFirebaseInstance = () => {
+    app.initializeApp(config);
+
+    const auth = app.auth();
+    //const db = app.database();
+
+    return {
+        login: (email, password) => auth.signInWithEmailAndPassword(email, password),
+        logout: () => auth.signOut(),
+        register: async (name, email, password) => {
+            await auth.createUserWithEmailAndPassword(email, password);
+            return auth.currentUser.updateProfile({ displayName: name });
+        },
+        getCurrentUsername: () => auth.currentUser && auth.currentUser.displayName
+    };
+};
+
+const firebase = makeFirebaseInstance();
 
 export default firebase;
