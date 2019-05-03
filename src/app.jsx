@@ -6,6 +6,17 @@ import Register from './pages/register';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import firebase from './firebase';
 
+const styles = {
+    loader: {
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+};
+
 const App = () => {
     const [isFirebaseInitialized, setIsFirebaseInitialized] = useState(false);
 
@@ -23,7 +34,7 @@ const App = () => {
                 <Route exact path="/register" component={Register} />
             </Switch>
         </Router>
-    ) : <CircularProgress />;
+    ) : <div style={styles.loader}><CircularProgress /></div>;
 };
 
 export default App;
