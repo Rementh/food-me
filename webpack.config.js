@@ -1,7 +1,12 @@
+/* eslint-disable camelcase */
 const webpack = require('webpack');
+const path = require('path');
 const WorkboxPlugin = require('workbox-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+//const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const firebaseConfig = require('./firebase-config');
 
 module.exports = {
     entry: ['@babel/polyfill', './src/index.js'],
@@ -39,21 +44,19 @@ module.exports = {
         filename: 'bundle.js'
     },
     plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            favicon: './src/assets/favicon.ico'
+        }),
         new webpack.HotModuleReplacementPlugin(),
-        new CleanWebpackPlugin(['dist']),
-        new CopyWebpackPlugin([
-            { from: 'public' }
-        ]),
+        new CleanWebpackPlugin(),
+        //new CopyWebpackPlugin([{ from: 'public' }]),
         new WorkboxPlugin.GenerateSW({
-            // these options encourage the ServiceWorkers to get in there fast
-            // and not allow any straggling "old" SWs to hang around
             clientsClaim: true,
             skipWaiting: true,
             navigateFallback: '/index.html',
             runtimeCaching: [{
-                // To match cross-origin requests, use a RegExp that matches
-                // the start of the origin:
-                urlPattern: new RegExp('^https://food-me-app.firebaseio.com/'),
+                urlPattern: new RegExp(`^${firebaseConfig.databaseURL}`),
                 handler: 'cacheFirst',
                 options: {
                     cacheableResponse: {
@@ -61,6 +64,24 @@ module.exports = {
                     }
                 }
             }]
+        }),
+        new WebpackPwaManifest({
+            name: 'Food Me',
+            short_name: 'Food Me',
+            start_url: '.',
+            display: 'fullscreen',
+            theme_color: '#4aa0d5',
+            background_color: '#f4f4f4',
+            icons: [
+                {
+                    src: path.resolve('src/assets/favicon.ico'),
+                    sizes: [16, 24, 32, 64]
+                },
+                {
+                    src: path.resolve('src/assets/favicon.png'),
+                    sizes: [192, 512]
+                }
+            ]
         })
     ],
     devServer: {

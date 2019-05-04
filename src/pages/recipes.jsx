@@ -16,7 +16,7 @@ const Recipes = () => {
 
     useEffect(() => {
         firebase.getRecipes().then(data => setRecipes(data));
-    });
+    }, []);
 
     return (
         <div styles={styles.container}>

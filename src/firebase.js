@@ -1,11 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/auth';
-
-const config = {
-    apiKey: 'AIzaSyAlcLI7fLatHN_VUoBccI68FHjOLSm5vO0',
-    authDomain: 'https://food-me-app.firebasapp.com/',
-    databaseURL: 'https://food-me-app.firebaseio.com/'
-};
+import * as config from '../firebase-config';
 
 const makeFirebaseInstance = () => {
     app.initializeApp(config);
