@@ -12,17 +12,24 @@ const makeFirebaseInstance = () => {
     app.initializeApp(config);
 
     const auth = app.auth();
-    //const db = app.database();
+    const db = app.database();
 
-    return {
+    const authFunctions = {
         login: (email, password) => auth.signInWithEmailAndPassword(email, password),
         logout: () => auth.signOut(),
-        register: async (name, email, password) => {
-            await auth.createUserWithEmailAndPassword(email, password);
-            return auth.currentUser.updateProfile({ displayName: name });
-        },
+        register: (name, email, password) => auth.createUserWithEmailAndPassword(email, password).then(() =>
+            auth.currentUser.updateProfile({ displayName: name })),
         getCurrentUsername: () => auth.currentUser && auth.currentUser.displayName,
         isInitialized: () => new Promise(resolve => auth.onAuthStateChanged(resolve))
+    };
+
+    const recipesFunctions = {
+        getRecipes: () => db.ref('recipes').once('value').then(snap => snap.val())
+    };
+
+    return {
+        ...authFunctions,
+        ...recipesFunctions
     };
 };
 

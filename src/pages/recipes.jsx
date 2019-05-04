@@ -1,48 +1,37 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import firebase from '../firebase';
 import Mock from '../components/mock';
 
 const styles = {
     container: {
-        margin: '0 20px'
+        display: 'block'
+    },
+    title: {
+        marginTop: 0
     }
 };
 
-class Recipes extends Component {
-    state = {
-        data: null
-    };
+const Recipes = () => {
+    const [recipes, setRecipes] = useState(null);
 
-    componentDidMount() {
-        //const user = {
-        //    email: 'test@test.com',
-        //    password: 'testtest'
-        //};
+    useEffect(() => {
+        firebase.getRecipes().then(data => setRecipes(data));
+    });
 
-        //firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-        //    .then(this.loadData)
-        //    .catch(console.log);
-    }
-
-    loadData = () => {
-        firebase.database().ref('recipes').once('value').then(snap =>
-            this.setState({ data: snap.val() })
-        );
-    }
-
-    render = () =>
-        <div style={styles.container}>
-            <h2>Recipes</h2>
-            {this.state.data
-                ? this.state.data.map((recipe, index) =>
+    return (
+        <div styles={styles.container}>
+            <h2 style={styles.title}>Recipes</h2>
+            {recipes
+                ? recipes.map((recipe, index) =>
                     <React.Fragment key={index}>
                         <h4>{recipe.title}</h4>
                         {recipe.instructions.map((step, index) => <p key={index}>{index + 1}. {step}</p>)}
                     </React.Fragment>
                 )
                 : renderMockRecipes(10)}
-        </div>;
-}
+        </div>
+    );
+};
 
 const renderMockRecipes = (count) => Array(count).fill(null).map((x, index) => <Mock key={index}></Mock>);
 

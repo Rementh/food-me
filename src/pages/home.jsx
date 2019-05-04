@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import firebase from '../firebase';
+import Recipes from './recipes';
 
 const styles = {
     paper: {
@@ -33,6 +34,7 @@ const Home = ({ history }) => {
             <Paper style={styles.paper}>
                 <h2 style={styles.header}>Login</h2>
                 <p style={styles.user}>{firebase.getCurrentUsername()}</p>
+                <Recipes />
                 <Button variant="contained" color="primary" type="submit">Logout</Button>
             </Paper>
         </form>
