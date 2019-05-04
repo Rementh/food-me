@@ -49,7 +49,18 @@ module.exports = {
             // and not allow any straggling "old" SWs to hang around
             clientsClaim: true,
             skipWaiting: true,
-            navigateFallback: '/index.html'
+            navigateFallback: '/index.html',
+            runtimeCaching: [{
+                // To match cross-origin requests, use a RegExp that matches
+                // the start of the origin:
+                urlPattern: new RegExp('^https://food-me-app.firebaseio.com/'),
+                handler: 'cacheFirst',
+                options: {
+                    cacheableResponse: {
+                        statuses: [0, 200]
+                    }
+                }
+            }]
         })
     ],
     devServer: {

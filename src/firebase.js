@@ -1,6 +1,5 @@
 import app from 'firebase/app';
 import 'firebase/auth';
-import 'firebase/database';
 
 const config = {
     apiKey: 'AIzaSyAlcLI7fLatHN_VUoBccI68FHjOLSm5vO0',
@@ -12,7 +11,12 @@ const makeFirebaseInstance = () => {
     app.initializeApp(config);
 
     const auth = app.auth();
-    const db = app.database();
+
+    const restFunctions = {
+        firebaseGet: query => auth.currentUser.getIdToken().then(idToken =>
+            fetch(`${config.databaseURL}${query}.json?auth=${idToken}`)
+                .then(res => res.json()))
+    };
 
     const authFunctions = {
         login: (email, password) => auth.signInWithEmailAndPassword(email, password),
@@ -24,7 +28,7 @@ const makeFirebaseInstance = () => {
     };
 
     const recipesFunctions = {
-        getRecipes: () => db.ref('recipes').once('value').then(snap => snap.val())
+        getRecipes: () => restFunctions.firebaseGet('recipes')
     };
 
     return {
