@@ -32,8 +32,6 @@ const Home = ({ history }) => {
     return (
         <form onSubmit={handleOnLogout}>
             <Paper style={styles.paper}>
-                <h2 style={styles.header}>Login</h2>
-                <p style={styles.user}>{firebase.getCurrentUsername()}</p>
                 <Recipes />
                 <Button variant="contained" color="primary" type="submit">Logout</Button>
             </Paper>

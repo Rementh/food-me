@@ -8,10 +8,12 @@ const makeFirebaseInstance = () => {
     const auth = app.auth();
 
     const restFunctions = {
-        firebaseGet: query => auth.currentUser.getIdToken().then(idToken =>
+        get: query => auth.currentUser.getIdToken().then(idToken =>
             fetch(`${config.databaseURL}${query}.json?auth=${idToken}`)
                 .then(res => res.json()))
     };
+
+    const { get } = restFunctions;
 
     const authFunctions = {
         login: (email, password) => auth.signInWithEmailAndPassword(email, password),
@@ -23,7 +25,8 @@ const makeFirebaseInstance = () => {
     };
 
     const recipesFunctions = {
-        getRecipes: () => restFunctions.firebaseGet('recipes')
+        getRecipes: () => get('recipes'),
+        getRecipe: id => get('recipes').then(data => data[id])
     };
 
     return {

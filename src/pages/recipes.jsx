@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import firebase from '../firebase';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import Mock from '../components/mock';
+import { Link as RouterLink } from 'react-router-dom';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
-const styles = {
-    container: {
-        display: 'block'
-    },
+const styles = () => ({
     title: {
         marginTop: 0
     }
-};
+});
 
-const Recipes = () => {
+const renderMockRecipes = count => Array(count)
+    .fill(null)
+    .map((x, index) => <Mock key={index} />);
+
+const ListItemLink = props => <ListItem button component={RouterLink} {...props} />;
+
+const Recipes = ({ classes }) => {
     const [recipes, setRecipes] = useState(null);
 
     useEffect(() => {
@@ -19,20 +28,21 @@ const Recipes = () => {
     }, []);
 
     return (
-        <div styles={styles.container}>
-            <h2 style={styles.title}>Recipes</h2>
-            {recipes
-                ? recipes.map((recipe, index) =>
-                    <React.Fragment key={index}>
-                        <h4>{recipe.title}</h4>
-                        {recipe.instructions.map((step, index) => <p key={index}>{index + 1}. {step}</p>)}
-                    </React.Fragment>
-                )
-                : renderMockRecipes(10)}
+        <div>
+            <h2 className={classes.title}>Recipes</h2>
+            {recipes === null ? renderMockRecipes(10) :
+                <List component="nav">
+                    {Object.entries(recipes).map(([key, value]) =>
+                        <ListItemLink to={`/recipes/${key}`} key={key}>
+                            <ListItemText primary={value.title} />
+                        </ListItemLink>)}
+                </List>}
         </div>
     );
 };
 
-const renderMockRecipes = (count) => Array(count).fill(null).map((x, index) => <Mock key={index}></Mock>);
+Recipes.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
 
-export default Recipes;
+export default withStyles(styles)(Recipes);
