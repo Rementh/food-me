@@ -26,9 +26,11 @@ const Recipe = ({ match, classes }) => {
             {recipe.ingredients.map((group, index) =>
                 <div key={index}>
                     <h4>Group {index + 1}</h4>
-                    {Object.entries(group).map(([key, value], index) =>
-                        <p key={index}>{key}: {value}</p>
-                    )}
+                    <ul>
+                        {Object.entries(group).map(([key, value], index) =>
+                            <li key={index}>{key}: {value}</li>
+                        )}
+                    </ul>
                 </div>
             )}
             <br></br>
