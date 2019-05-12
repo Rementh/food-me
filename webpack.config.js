@@ -50,7 +50,6 @@ module.exports = {
         }),
         new webpack.HotModuleReplacementPlugin(),
         new CleanWebpackPlugin(),
-        //new CopyWebpackPlugin([{ from: 'public' }]),
         new WorkboxPlugin.GenerateSW({
             clientsClaim: true,
             skipWaiting: true,
@@ -87,5 +86,6 @@ module.exports = {
     devServer: {
         contentBase: './dist',
         hot: true
-    }
+    },
+    devTool: 'cheap-module-eval-source-map'
 };
