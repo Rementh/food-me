@@ -4,6 +4,7 @@ import Home from './pages/home';
 import Login from './pages/login';
 import Register from './pages/register';
 import Recipe from './pages/recipe';
+import NewRecipe from './pages/new-recipe';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import firebase from './firebase';
 
@@ -34,6 +35,7 @@ const App = () => {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/recipes/:id" component={Recipe} />
+                <Route exact path="/newrecipe" component={NewRecipe} />
             </Switch>
         </Router>
     ) : <div style={styles.loader}><CircularProgress /></div>;
