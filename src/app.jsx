@@ -1,44 +1,44 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './pages/home';
+import Login from './pages/login';
+import Register from './pages/register';
+import Recipe from './pages/recipe';
+import NewRecipe from './pages/new-recipe';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import firebase from './firebase';
-import Mock from './components/mock';
 
 const styles = {
-    container: {
-        margin: '0 20px'
+    loader: {
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 };
 
-class App extends Component {
-    state = {
-        data: null
-    };
+const App = () => {
+    const [isFirebaseInitialized, setIsFirebaseInitialized] = useState(false);
 
-    componentDidMount() {
-        const user = {
-            email: 'test@test.com',
-            password: 'testtest'
-        };
-
-        firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-            .then(this.loadData)
-            .catch(console.log);
-    }
-
-    loadData = () => {
-        firebase.database().ref('recipes').once('value').then(snap =>
-            this.setState({ data: snap.val() })
+    useEffect(() => {
+        firebase.isInitialized().then(val =>
+            setIsFirebaseInitialized(val)
         );
-    }
+    });
 
-    render = () =>
-        <div style={styles.container}>
-            <h2>Recipes</h2>
-            {this.state.data
-                ? this.state.data.map((recipe, index) => <p key={index}>{recipe.title}</p>)
-                : renderMockRecipes(10)}
-        </div>;
-}
-
-const renderMockRecipes = (count) => Array(count).fill(<Mock />).map((x, index) => <Mock key={index}>{x}</Mock>);
+    return isFirebaseInitialized !== false ? (
+        <Router>
+            <Switch>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/register" component={Register} />
+                <Route exact path="/recipes/:id" component={Recipe} />
+                <Route exact path="/newrecipe" component={NewRecipe} />
+            </Switch>
+        </Router>
+    ) : <div style={styles.loader}><CircularProgress /></div>;
+};
 
 export default App;
