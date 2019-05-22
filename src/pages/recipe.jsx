@@ -40,7 +40,7 @@ const Recipe = ({ match, classes }) => {
                     {index + 1}. {step}
                 </p>)}
         </Paper>
-    ) : match.params.id;
+    ) : '';
 };
 
 Recipe.propTypes = {
