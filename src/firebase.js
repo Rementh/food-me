@@ -8,12 +8,17 @@ const makeFirebaseInstance = () => {
     const auth = app.auth();
 
     const restFunctions = {
-        get: query => auth.currentUser.getIdToken().then(idToken =>
+        get: (query, refresh = false) => auth.currentUser.getIdToken(refresh).then(idToken =>
             fetch(`${config.databaseURL}${query}.json?auth=${idToken}`)
-                .then(res => res.json()))
+                .then(res => res.json())),
+        put: (query, data) => auth.currentUser.getIdToken().then(idToken =>
+            fetch(`${config.databaseURL}${query}.json?auth=${idToken}`, {
+                method: 'put',
+                body: JSON.stringify(data)
+            }).then(res => res.json()))
     };
 
-    const { get } = restFunctions;
+    const { get, put } = restFunctions;
 
     const authFunctions = {
         login: (email, password) => auth.signInWithEmailAndPassword(email, password),
@@ -26,7 +31,8 @@ const makeFirebaseInstance = () => {
 
     const recipesFunctions = {
         getRecipes: () => get('recipes'),
-        getRecipe: id => get('recipes').then(data => data[id])
+        getRecipe: id => get('recipes').then(data => data[id]),
+        addRecipe: recipe => put(`recipes/${recipe.id}`, recipe.body).then(() => get('recipes', true).then(() => recipe.id))
     };
 
     return {

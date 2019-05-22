@@ -5,6 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { TextField, Button } from '@material-ui/core';
 import classnames from 'classnames';
 import guid from '../utils/guid';
+import firebase from '../firebase';
+import { withRouter } from 'react-router-dom';
 
 const styles = theme => {
     const doubleUnit = theme.spacing.unit * 2;
@@ -62,24 +64,29 @@ const Group = withStyles(styles)(({ classes, onRemove, index, ingredients, onIng
     </>
 ));
 
-const NewRecipe = ({ classes }) => {
+const NewRecipe = ({ classes, history }) => {
     const [title, setTitle] = useState('');
     const [ingredientGroups, setIngredientGroups] = useState([]);
     const [instructions, setInstructions] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = e => {
         e.preventDefault();
+        setIsSubmitting(true);
 
-        const obj = {
-            title: title,
-            instructions: instructions.map(step => step.value),
-            ingredients: ingredientGroups.map(group => group.ingredients.reduce((map, ingredient) => {
-                map[ingredient.name] = ingredient.value;
-                return map;
-            }, {}))
+        const recipe = {
+            id: title.toLowerCase().replace(/\s/g, ''),
+            body: {
+                title: title,
+                instructions: instructions.map(step => step.value),
+                ingredients: ingredientGroups.map(group => group.ingredients.reduce((map, ingredient) => {
+                    map[ingredient.name] = ingredient.value;
+                    return map;
+                }, {}))
+            }
         };
 
-        console.log(obj);
+        firebase.addRecipe(recipe).then(id => history.push(`/recipes/${id}`));
     };
 
     //////////////////////////////////////////// Instructions
@@ -180,14 +187,15 @@ const NewRecipe = ({ classes }) => {
                     <Instruction key={item.id} index={i} value={item.value} onChange={changeInstruction} onRemove={removeInstruction} />
                 )}
 
-                <Button className={classes.formControl} variant="contained" color="primary" type="submit">Submit</Button>
+                <Button disabled={isSubmitting} className={classes.formControl} variant="contained" color="primary" type="submit">Submit</Button>
             </form>
         </Paper>
     );
 };
 
 NewRecipe.propTypes = {
-    classes: PropTypes.object
+    classes: PropTypes.object,
+    history: PropTypes.object
 };
 
-export default withStyles(styles)(NewRecipe);
+export default withRouter(withStyles(styles)(NewRecipe));
