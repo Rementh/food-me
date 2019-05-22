@@ -7,18 +7,28 @@ import { Link as RouterLink } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { Button } from '@material-ui/core';
 
 const styles = () => ({
     title: {
-        marginTop: 0
-    }
+        margin: 0
+    },
+    header: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
 });
 
 const renderMockRecipes = count => Array(count)
     .fill(null)
     .map((x, index) => <Mock key={index} />);
 
-const ListItemLink = props => <ListItem button component={RouterLink} {...props} />;
+const ListItemLink = props =>
+    <ListItem button component={RouterLink} {...props} />;
+
+const NavButton = props =>
+    <Button variant="contained" color="secondary" component={RouterLink} {...props} />;
 
 const Recipes = ({ classes }) => {
     const [recipes, setRecipes] = useState(null);
@@ -29,7 +39,10 @@ const Recipes = ({ classes }) => {
 
     return (
         <div>
-            <h2 className={classes.title}>Recipes</h2>
+            <div className={classes.header}>
+                <h2 className={classes.title}>Recipes</h2>
+                <NavButton to="/newrecipe">+</NavButton>
+            </div>
             {recipes === null ? renderMockRecipes(10) :
                 <List component="nav">
                     {Object.entries(recipes).map(([key, value]) =>
