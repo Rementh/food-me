@@ -22,27 +22,26 @@ const styles = {
     }
 };
 
+const handleOnLogout = history => async e => {
+    e.preventDefault();
+    await firebase.logout();
+    history.push('/login');
+};
+
 const Home = ({ history }) => {
     if (!firebase.getCurrentUsername()) {
-        alert('login mate');
-        history.push('/login');
-        return null;
+        history.replace('/login');
+        return <></>;
     }
 
     return (
-        <form onSubmit={handleOnLogout}>
+        <form onSubmit={handleOnLogout(history)}>
             <Paper style={styles.paper}>
                 <Recipes />
                 <Button variant="contained" color="primary" type="submit">Logout</Button>
             </Paper>
         </form>
     );
-
-    async function handleOnLogout(e) {
-        e.preventDefault();
-        await firebase.logout();
-        history.push('/login');
-    }
 };
 
 Home.propTypes = { history: PropTypes.object.isRequired };
