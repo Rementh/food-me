@@ -44,7 +44,7 @@ const Recipes = ({ classes }) => {
                 <NavButton to="/newrecipe">+</NavButton>
             </div>
             {recipes === null ? renderMockRecipes(10) :
-                <List component="nav">
+                <List dense component="nav">
                     {Object.entries(recipes).map(([key, value]) =>
                         <ListItemLink to={`/recipes/${key}`} key={key}>
                             <ListItemText primary={value.title} />

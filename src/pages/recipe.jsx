@@ -1,17 +1,86 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import firebase from '../firebase';
-import Paper from '@material-ui/core/Paper';
+import { Paper, Button } from '@material-ui/core';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router-dom';
 
 const styles = () => ({
     paper: {
-        padding: 20,
-        margin: 20
+        display: 'flex',
+        fontSize: '0.875rem',
+        flexDirection: 'column',
+        padding: '20px 20px 0',
+        '& *': {
+            margin: 0
+        },
+        '& > *': {
+            marginBottom: 16
+        },
+    },
+    bar: {
+        display: 'flex',
+        alignItems: 'center',
+        borderBottom: '1px solid #d5d5d5',
+        paddingBottom: 16,
     }
 });
 
-const Recipe = ({ match, classes }) => {
+
+const Title = ({ className, children }) => {
+    return (
+        <p className={className}>{children}</p>
+    );
+};
+
+Title.propTypes = {
+    className: PropTypes.string,
+    children: PropTypes.node.isRequired
+};
+
+const Ingredients = ({ className, ingredients }) => {
+    return (
+        <div className={className}>
+            <h4 style={{ marginBottom: 10 }}>Ingredients</h4>
+            {ingredients.map((group, index) =>
+                <div key={index}>
+                    <p>Group {index + 1}</p>
+                    <ul>
+                        {Object.entries(group).map(([key, value], index) =>
+                            <li key={index}>{key}: {value}</li>
+                        )}
+                    </ul>
+                </div>
+            )}
+        </div>
+    );
+};
+
+Ingredients.propTypes = {
+    className: PropTypes.string,
+    ingredients: PropTypes.array.isRequired
+};
+
+const Instructions = ({ className, instructions }) => {
+    return (
+        <div className={className}>
+            <h4 style={{ marginBottom: 10 }}>Instructions</h4>
+            {instructions.map((step, index) =>
+                <p key={index}>
+                    {index + 1}. {step}
+                </p>
+            )}
+        </div>
+    );
+};
+
+Instructions.propTypes = {
+    className: PropTypes.string,
+    instructions: PropTypes.array.isRequired
+};
+
+const Recipe = ({ history, match, classes }) => {
     const [recipe, setRecipe] = useState(null);
 
     useEffect(() => {
@@ -20,27 +89,16 @@ const Recipe = ({ match, classes }) => {
 
     return recipe ? (
         <Paper className={classes.paper}>
-            <h2>{recipe.title}</h2>
-            <br></br>
-            <h3>Ingredients</h3>
-            {recipe.ingredients.map((group, index) =>
-                <div key={index}>
-                    <h4>Group {index + 1}</h4>
-                    <ul>
-                        {Object.entries(group).map(([key, value], index) =>
-                            <li key={index}>{key}: {value}</li>
-                        )}
-                    </ul>
-                </div>
-            )}
-            <br></br>
-            <h3>Instructions</h3>
-            {recipe.instructions.map((step, index) =>
-                <p key={index}>
-                    {index + 1}. {step}
-                </p>)}
+            <div className={classes.bar} >
+                <Button onClick={() => history.push('/')}>
+                    <ArrowBackIosIcon />
+                </Button>
+                <Title>{recipe.title}</Title>
+            </div>
+            <Ingredients ingredients={recipe.ingredients} />
+            <Instructions instructions={recipe.instructions} />
         </Paper>
-    ) : '';
+    ) : <></>;
 };
 
 Recipe.propTypes = {
@@ -50,6 +108,7 @@ Recipe.propTypes = {
             id: PropTypes.string,
         }),
     }),
+    history: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Recipe);
+export default withStyles(styles)(withRouter(Recipe));
