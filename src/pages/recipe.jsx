@@ -43,16 +43,11 @@ const Ingredients = ({ className, ingredients }) => {
     return (
         <div className={className}>
             <h4 style={{ marginBottom: 10 }}>Ingredients</h4>
-            {ingredients.map((group, index) =>
-                <div key={index}>
-                    <p>Group {index + 1}</p>
-                    <ul>
-                        {Object.entries(group).map(([key, value], index) =>
-                            <li key={index}>{key}: {value}</li>
-                        )}
-                    </ul>
-                </div>
-            )}
+            <ul>
+                {Object.entries(ingredients).map(([key, value], index) =>
+                    <li key={index}>{key}: {value}</li>
+                )}
+            </ul>
         </div>
     );
 };
