@@ -1,32 +1,17 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import firebase from '../firebase';
 import Recipes from './recipes';
+import { Paper, makeStyles } from '@material-ui/core';
+import AppBar from '../components/appbar';
 
-const styles = {
+const useStyles = makeStyles(() => ({
     paper: {
         display: 'flex',
         flexDirection: 'column',
-        padding: 20,
-        margin: 20
     },
-    user: {
-        marginTop: 0
-    },
-    header: {
-        textAlign: 'center',
-        marginTop: 0
-    }
-};
-
-const handleOnLogout = history => async e => {
-    e.preventDefault();
-    await firebase.logout();
-    history.push('/login');
-};
+}));
 
 const Home = ({ history }) => {
     if (!firebase.getCurrentUsername()) {
@@ -34,13 +19,15 @@ const Home = ({ history }) => {
         return <></>;
     }
 
+    const classes = useStyles();
+
     return (
-        <form onSubmit={handleOnLogout(history)}>
-            <Paper style={styles.paper}>
+        <>
+            <AppBar />
+            <Paper className={classes.paper}>
                 <Recipes />
-                <Button variant="contained" color="primary" type="submit">Logout</Button>
             </Paper>
-        </form>
+        </>
     );
 };
 
