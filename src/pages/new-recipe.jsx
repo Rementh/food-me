@@ -9,7 +9,7 @@ import firebase from '../firebase';
 import { withRouter } from 'react-router-dom';
 
 const styles = theme => {
-    const doubleUnit = theme.spacing.unit * 2;
+    const doubleUnit = theme.spacing(2);
 
     return ({
         container: {
