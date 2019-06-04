@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import firebase from '../firebase';
 import Recipes from './recipes';
-import { Paper, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import AppBar from '../components/appbar';
 
 const useStyles = makeStyles(() => ({
-    paper: {
+    container: {
         display: 'flex',
         flexDirection: 'column',
+        background: '#888',
+        padding: 5,
+        flex: 1,
     },
 }));
 
@@ -24,9 +27,9 @@ const Home = ({ history }) => {
     return (
         <>
             <AppBar />
-            <Paper className={classes.paper}>
+            <div className={classes.container}>
                 <Recipes />
-            </Paper>
+            </div>
         </>
     );
 };

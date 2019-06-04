@@ -32,6 +32,9 @@ const useStyles = makeStyles(theme => ({
     title: {
         flexGrow: 1,
     },
+    bar: {
+        background: '#ffb000',
+    }
 }));
 
 const PrimarySearchAppBar = ({ history }) => {
@@ -86,7 +89,7 @@ const PrimarySearchAppBar = ({ history }) => {
     return (
         <>
             <HideOnScroll>
-                <AppBar>
+                <AppBar className={classes.bar}>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" onClick={handleMenuOpen} className={classes.menuButton}>
                             <MenuIcon />

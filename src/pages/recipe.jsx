@@ -54,7 +54,7 @@ const Ingredients = ({ className, ingredients }) => {
 
 Ingredients.propTypes = {
     className: PropTypes.string,
-    ingredients: PropTypes.array.isRequired
+    ingredients: PropTypes.object.isRequired
 };
 
 const Instructions = ({ className, instructions }) => {

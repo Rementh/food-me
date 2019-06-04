@@ -64,12 +64,12 @@ module.exports = {
             }]
         }),
         new WebpackPwaManifest({
-            name: 'Food Me',
-            short_name: 'Food Me',
+            name: 'Food Me Up!',
+            short_name: 'Food Me Up!',
             start_url: '.',
-            display: 'fullscreen',
-            theme_color: '#4aa0d5',
-            background_color: '#f4f4f4',
+            display: 'standalone',
+            theme_color: '#b37b00',
+            background_color: '#ffb000',
             icons: [
                 {
                     src: path.resolve('src/assets/favicon.ico'),
