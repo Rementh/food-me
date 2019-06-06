@@ -10,15 +10,16 @@ const renderMockRecipes = count => Array(count)
     .fill(null)
     .map((x, index) => <Mock key={index} />);
 
-
 const useStyles = makeStyles({
     root: {
         padding: 6,
-        borderRadius: '56px 4px 4px 56px',
+        borderRadius: '4px',
         background: '#fff',
         margin: 5,
         lineHeight: 'unset',
         textTransform: 'unset',
+        border: '1px solid #dedede',
+        fontWeight: 400,
     },
 });
 
@@ -27,7 +28,7 @@ const RecipeLink = ({ id, title }) => {
 
     return (
         <Button className={styles.root} component={Link} to={`/recipes/${id}`}>
-            <div style={{ width: 56, height: 56, background: '#333', borderRadius: 56, marginRight: 6 }} />
+            <div style={{ width: 56, height: 56, background: 'rgba(255, 128, 0, 0.2)', borderRadius: 56, marginRight: 6 }} />
             <div style={{ flex: 1 }}>
                 <div>
                     {title}
@@ -35,9 +36,9 @@ const RecipeLink = ({ id, title }) => {
                 </div>
                 <div style={{ flex: 1, height: 1, background: '#ddd', margin: '6px 0' }} />
                 <div style={{ display: 'flex' }}>
-                    <div style={{ marginRight: 4, width: 8, height: 8, background: '#333' }}></div>
-                    <div style={{ marginRight: 4, width: 8, height: 8, background: '#333' }}></div>
-                    <div style={{ marginRight: 4, width: 8, height: 8, background: '#333' }}></div>
+                    <div style={{ marginRight: 4, width: 8, height: 8, background: 'rgba(76, 175, 80, 0.2)', borderRadius: 2 }}></div>
+                    <div style={{ marginRight: 4, width: 8, height: 8, background: 'rgba(76, 175, 80, 0.2)', borderRadius: 2 }}></div>
+                    <div style={{ marginRight: 4, width: 8, height: 8, background: 'rgba(76, 175, 80, 0.2)', borderRadius: 2 }}></div>
                 </div>
             </div>
         </Button>

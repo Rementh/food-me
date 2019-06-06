@@ -10,7 +10,6 @@ const useStyles = makeStyles(() => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        background: '#888',
         padding: 5,
         flex: 1,
     },

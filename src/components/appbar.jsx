@@ -33,7 +33,10 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
     },
     bar: {
-        background: '#ffb000',
+        color: '#444',
+        background: '#fff',
+        borderBottom: '1px solid #dedede',
+        boxShadow: 'unset',
     }
 }));
 

@@ -31,7 +31,14 @@ module.exports = {
                     'style-loader',
                     'css-loader'
                 ]
-            }
+            },
+            {
+                test: /\.(png|jpe?g|gif|svg|eot|ttf|woff|woff2)$/,
+                loader: 'url-loader',
+                options: {
+                    limit: 10000,
+                },
+            },
         ]
     },
     resolve: {
@@ -68,8 +75,8 @@ module.exports = {
             short_name: 'Food Me Up!',
             start_url: '.',
             display: 'standalone',
-            theme_color: '#b37b00',
-            background_color: '#ffb000',
+            theme_color: '#444',
+            background_color: '#444',
             icons: [
                 {
                     src: path.resolve('src/assets/favicon.ico'),

@@ -1,17 +1,16 @@
 html, body {
-    width: 100%;
-    height: 100%;
-	padding: 0;
 	margin: 0;
-	background: #FAFAFA;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
 }
 
 body, input, textarea {
-	font-family: 'Helvetica Neue', arial, sans-serif;
+	font-family: 'Roboto', 'Helvetica Neue', arial, sans-serif;
 	font-weight: 400;
-	color: #444;
+	color: rgba(0, 0, 0, 0.87);
+}
+
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 * {
@@ -19,7 +18,6 @@ body, input, textarea {
 }
 
 #root {
-    height: 100%;
     display: flex;
     flex-direction: column;
 }
