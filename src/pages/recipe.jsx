@@ -24,6 +24,10 @@ const styles = () => ({
         alignItems: 'center',
         borderBottom: '1px solid #d5d5d5',
         paddingBottom: 16,
+    },
+    info: {
+        display: 'flex',
+        justifyContent: 'space-between',
     }
 });
 
@@ -89,6 +93,10 @@ const Recipe = ({ history, match, classes }) => {
                     <ArrowBackIosIcon />
                 </Button>
                 <Title>{recipe.title}</Title>
+            </div>
+            <div className={classes.info}>
+                <div>{recipe.difficulity}</div>
+                <div>{recipe.time}</div>
             </div>
             <Ingredients ingredients={recipe.ingredients} />
             <Instructions instructions={recipe.instructions} />
