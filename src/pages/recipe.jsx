@@ -31,25 +31,21 @@ const styles = () => ({
     }
 });
 
-
-const Title = ({ className, children }) => {
-    return (
-        <p className={className}>{children}</p>
-    );
-};
+const Title = ({ className, children }) => <p className={className}>{children}</p>;
 
 Title.propTypes = {
     className: PropTypes.string,
     children: PropTypes.node.isRequired
 };
 
-const Ingredients = ({ className, ingredients }) => {
+const Ingredients = ({ className, ingredients, name = 'Ingredients' }) => {
     return (
         <div className={className}>
-            <h4 style={{ marginBottom: 10 }}>Ingredients</h4>
+            <h4 style={{ marginBottom: 10, marginTop: 10 }}>{name}</h4>
             <ul>
-                {Object.entries(ingredients).map(([key, value], index) =>
-                    <li key={index}>{key}: {value}</li>
+                {Object.entries(ingredients).map(([key, value], index) => typeof (value) === 'object'
+                    ? <Ingredients name={key} ingredients={value} />
+                    : <li key={index}>{key}: {value}</li>
                 )}
             </ul>
         </div>
@@ -58,7 +54,8 @@ const Ingredients = ({ className, ingredients }) => {
 
 Ingredients.propTypes = {
     className: PropTypes.string,
-    ingredients: PropTypes.object.isRequired
+    ingredients: PropTypes.object.isRequired,
+    name: PropTypes.string,
 };
 
 const Instructions = ({ className, instructions }) => {
