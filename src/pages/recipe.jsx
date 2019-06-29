@@ -98,11 +98,16 @@ const Recipe = ({ history, match, classes }) => {
     }, []);
 
     const handleChange = portion => {
+        scaleByPortion(recipe.ingredients, portion);
         setActive(portion);
+    };
 
-        Object.entries(recipe.ingredients).forEach(([key, value]) => {
+    const scaleByPortion = (obj, portion) => {
+        Object.entries(obj).forEach(([key, value]) => {
             if (Array.isArray(value)) {
-                recipe.ingredients[key] = [value[0] / active * portion, value[1]];
+                obj[key] = [value[0] / active * portion, value[1]];
+            } else {
+                scaleByPortion(obj[key], portion);
             }
         });
     };
