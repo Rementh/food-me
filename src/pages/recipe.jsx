@@ -5,6 +5,7 @@ import { Paper, Button } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
+import SlidePicker from '../components/slide-picker';
 
 const styles = () => ({
     paper: {
@@ -43,10 +44,18 @@ const Ingredients = ({ className, ingredients, name = 'Ingredients' }) => {
         <div className={className}>
             <h4 style={{ marginBottom: 10, marginTop: 10 }}>{name}</h4>
             <ul>
-                {Object.entries(ingredients).map(([key, value], index) => typeof (value) === 'object'
-                    ? <Ingredients name={key} ingredients={value} />
-                    : <li key={index}>{key}: {value}</li>
-                )}
+                {Object.entries(ingredients)
+                    .filter(([, value]) => Array.isArray(value))
+                    .map(([key, value], index) =>
+                        <li key={index}>
+                            {key}: {value[0] + ' ' + value[1]}
+                        </li>
+                    )}
+                {Object.entries(ingredients)
+                    .filter(([, value]) => !Array.isArray(value))
+                    .map(([key, value], index) =>
+                        <Ingredients key={index} name={key} ingredients={value} />
+                    )}
             </ul>
         </div>
     );
@@ -78,12 +87,27 @@ Instructions.propTypes = {
 
 const Recipe = ({ history, match, classes }) => {
     const [recipe, setRecipe] = useState(null);
+    const [active, setActive] = useState(1);
 
     useEffect(() => {
-        firebase.getRecipe(match.params.id).then(data => setRecipe(data));
+        firebase.getRecipe(match.params.id)
+            .then(data => {
+                setRecipe(data);
+                setActive(data.portion);
+            });
     }, []);
 
-    return recipe ? (
+    const handleChange = portion => {
+        setActive(portion);
+
+        Object.entries(recipe.ingredients).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+                recipe.ingredients[key] = [value[0] / active * portion, value[1]];
+            }
+        });
+    };
+
+    return !recipe ? <></> : (
         <Paper className={classes.paper}>
             <div className={classes.bar} >
                 <Button onClick={() => history.push('/')}>
@@ -95,10 +119,11 @@ const Recipe = ({ history, match, classes }) => {
                 <div>{recipe.difficulity}</div>
                 <div>{recipe.time}</div>
             </div>
+            <SlidePicker value={active} onChange={handleChange} />
             <Ingredients ingredients={recipe.ingredients} />
             <Instructions instructions={recipe.instructions} />
         </Paper>
-    ) : <></>;
+    );
 };
 
 Recipe.propTypes = {
