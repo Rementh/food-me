@@ -9,44 +9,64 @@ const useStyles = makeStyles({
     root: {
         background: '#dedede',
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
     },
     icon: {
         fontSize: '2rem',
     },
     active: {
-        fontSize: '3rem',
+        fontSize: '2.875rem',
+    },
+    container: {
+        position: 'relative',
+        flex: 1,
     },
     item: {
-        width: 56,
+        transition: '250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+        position: 'absolute',
         textAlign: 'center',
+        top: '50%',
     },
+    visible: {
+        opacity: 1,
+        display: 'block',
+    },
+    hidden: {
+        opacity: 0,
+    },
+    gone: {
+        display: 'none',
+    }
 });
 
-const SlidePicker = ({ value, onChange }) => {
+const ifIsActive = (offset, className) => offset === 50 ? className : '';
+const ifIsHidden = (offset, className) => offset > 80 || offset < 20 ? className : '';
+const ifIsGone = (offset, className) => offset > 110 || offset < -10 ? className : '';
+const getOffsets = (limit, value) => Array(limit).fill(30).map((offset, index) => offset * (index + 2) - offset * value + 20);
+
+const SlidePicker = ({ value, onChange, limit }) => {
     const classes = useStyles();
 
-    const handleLeft = () => {
-        if (value > 1) {
-            onChange(value - 1);
-        }
-    };
-
-    const handleRight = () => {
-        if (value < 8) {
-            onChange(value + 1);
-        }
-    };
+    const handleLeft = () => value > 1 && onChange(value - 1);
+    const handleRight = () => value < limit && onChange(value + 1);
 
     return (
         <div className={classes.root}>
             <IconButton aria-label="Left" onClick={handleLeft}>
                 <ArrowLeft className={classes.icon} />
             </IconButton>
-            <div className={classes.item}>{value > 1 && value - 1}</div>
-            <div className={classnames(classes.item, classes.active)}>{value}</div>
-            <div className={classes.item}>{value < 8 && value + 1}</div>
+            <div className={classes.container}>
+                {getOffsets(limit, value).map((offset, index) => {
+                    const style = { left: `${offset}%`, transform: `translateY(-50%) translateX(-${offset}%)` };
+
+                    const className = classnames(classes.item,
+                        ifIsActive(offset, classes.active),
+                        ifIsHidden(offset, classes.hidden),
+                        ifIsGone(offset, classes.gone),
+                    );
+
+                    return <div key={index} className={className} style={style}>{index + 1}</div>;
+                })}
+            </div>
             <IconButton aria-label="Right" onClick={handleRight}>
                 <ArrowRight className={classes.icon} />
             </IconButton>
@@ -54,8 +74,8 @@ const SlidePicker = ({ value, onChange }) => {
     );
 };
 
-
 SlidePicker.propTypes = {
+    limit: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
 };

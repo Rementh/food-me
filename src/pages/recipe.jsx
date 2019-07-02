@@ -124,7 +124,7 @@ const Recipe = ({ history, match, classes }) => {
                 <div>{recipe.difficulity}</div>
                 <div>{recipe.time}</div>
             </div>
-            <SlidePicker value={active} onChange={handleChange} />
+            <SlidePicker value={active} onChange={handleChange} limit={8} />
             <Ingredients ingredients={recipe.ingredients} />
             <Instructions instructions={recipe.instructions} />
         </Paper>
