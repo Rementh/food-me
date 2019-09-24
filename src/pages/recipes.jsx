@@ -6,10 +6,6 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 
-const renderMockRecipes = count => Array(count)
-    .fill(null)
-    .map((x, index) => <Mock key={index} />);
-
 const useStyles = makeStyles({
     root: {
         padding: 6,
@@ -23,7 +19,7 @@ const useStyles = makeStyles({
     },
 });
 
-const RecipeLink = ({ id, title }) => {
+const RecipeLink = ({ id, name }) => {
     const styles = useStyles();
 
     return (
@@ -31,8 +27,7 @@ const RecipeLink = ({ id, title }) => {
             <div style={{ width: 56, height: 56, background: 'rgba(255, 128, 0, 0.2)', borderRadius: 56, marginRight: 6 }} />
             <div style={{ flex: 1 }}>
                 <div>
-                    {title}
-                    {/* {'Papryki faszerowane kurczakiem, fasolą, oraz kukurydzą'} */}
+                    {name}
                 </div>
                 <div style={{ flex: 1, height: 1, background: '#ddd', margin: '6px 0' }} />
                 <div style={{ display: 'flex' }}>
@@ -47,17 +42,71 @@ const RecipeLink = ({ id, title }) => {
 
 RecipeLink.propTypes = {
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
 };
 
-const renderRecipes = recipes => Object.entries(recipes).map(([key, value]) =>
-    <RecipeLink key={key} id={key} title={value.title} />
+const renderMockRecipes = count => Array(count)
+    .fill(null)
+    .map((x, index) => <Mock key={index} />);
+
+const renderRecipes = recipes => recipes.map(value =>
+    <RecipeLink key={value.id} id={value.id} name={value.data.name} />
 );
+
+const pickUnitLabelForValue = (label, value) => {
+    /* Is standard unit (g, ml, ...) */
+    if (typeof label === 'string') {
+        return label;
+    }
+
+    /* Is floating point */
+    if (value % 1 !== 0) {
+        return label.three;
+    }
+
+    /* Is 1 */
+    if (value === 1) {
+        return label.one;
+    }
+
+    /* Ends with 12, 13, or 14 */
+    if ((value - 12) % 100 === 0 || (value - 13) % 100 === 0 || (value - 14) % 100 === 0) {
+        return label.five;
+    }
+
+    /* Ends with 2, 3, or 4 */
+    if ((value - 2) % 10 === 0 || (value - 3) % 10 === 0 || (value - 4) % 10 === 0) {
+        return label.three;
+    }
+
+    /* Is anything else */
+    return label.five;
+};
+
+const doit = () => {
+    const qts = [
+        1, 2, 3, 4, 5, 5.1,
+        11, 12, 13, 14, 15, 15.2,
+        21, 22, 23, 24, 25, 25.3,
+        101, 102, 103, 104, 105, 105.4,
+        111, 112, 113, 114, 115, 115.5,
+        121, 122, 123, 124, 125, 125.6,
+    ];
+
+    console.clear();
+    qts.forEach(x => {
+        const spoon = { one: 'łyżka', three: 'łyżki', five: 'łyżek' };
+        const g = 'g';
+        console.log(x, pickUnitLabelForValue(spoon, x));
+    });
+};
 
 const Recipes = () => {
     const [recipes, setRecipes] = useState(null);
 
+
     useEffect(() => {
+        doit();
         firebase.getRecipes().then(data => setRecipes(data));
     }, []);
 

@@ -91,23 +91,23 @@ const Recipe = ({ history, match, classes }) => {
 
     useEffect(() => {
         firebase.getRecipe(match.params.id)
-            .then(data => {
-                setRecipe(data);
-                setActive(data.portion);
+            .then(value => {
+                setRecipe(value.data);
+                setActive(value.data.portions);
             });
     }, []);
 
-    const handleChange = portion => {
-        scaleByPortion(recipe.ingredients, portion);
-        setActive(portion);
+    const handleChange = portions => {
+        //scaleByPortions(recipe.ingredients, portions);
+        setActive(portions);
     };
 
-    const scaleByPortion = (obj, portion) => {
+    const scaleByPortions = (obj, portions) => {
         Object.entries(obj).forEach(([key, value]) => {
             if (Array.isArray(value)) {
-                obj[key] = [value[0] / active * portion, value[1]];
+                obj[key] = [value[0] / active * portions, value[1]];
             } else {
-                scaleByPortion(obj[key], portion);
+                scaleByPortions(obj[key], portions);
             }
         });
     };
@@ -118,14 +118,14 @@ const Recipe = ({ history, match, classes }) => {
                 <Button onClick={() => history.push('/')}>
                     <ArrowBackIosIcon />
                 </Button>
-                <Title>{recipe.title}</Title>
+                <Title>{recipe.name}</Title>
             </div>
             <div className={classes.info}>
-                <div>{recipe.difficulity}</div>
+                <div>Trudność: {recipe.difficulity}/3</div>
                 <div>{recipe.time}</div>
             </div>
             <SlidePicker value={active} onChange={handleChange} limit={8} />
-            <Ingredients ingredients={recipe.ingredients} />
+            {/* <Ingredients ingredients={recipe.ingredients} /> */}
             <Instructions instructions={recipe.instructions} />
         </Paper>
     );
